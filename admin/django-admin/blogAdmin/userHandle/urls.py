@@ -1,9 +1,25 @@
 from django.urls import path,include
-from .views import users,register,login,logout,AuthenticatedUser
+from .views import (register,login,logout,
+AuthenticatedUser,PermissionAPIView,RoleViewSet,
+UserGenericAPIView,ProfileInfoAPIView,ProfilePasswordAPIView)
 urlpatterns = [
-    path('users',users),
     path('register',register),
     path('login',login),
     path('user',AuthenticatedUser.as_view()),
+    path("permissions",PermissionAPIView.as_view()),
+    path("roles",RoleViewSet.as_view({
+        'get':'list',
+        'post': 'create',
+    })),
+    path('roles/<str:pk>',RoleViewSet.as_view({
+        'get':"retrieve",
+        'put': "update",
+        "delete":"destroy",
+
+    })),
+    path('users',UserGenericAPIView.as_view()),
+    path('users/info',ProfileInfoAPIView.as_view()),
+    path('users/password',ProfilePasswordAPIView.as_view()),
+    path('users/<str:pk>',UserGenericAPIView.as_view()),
     path('logout',logout)
 ]

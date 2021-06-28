@@ -13,15 +13,14 @@ admin/react-admin/node_modules
 
 
 # dependencies
-/node_modules
-/.pnp
+admin/react-admin/.pnp
 .pnp.js
 
 # testing
-/coverage
+admin/react-admin/coverage
 
 # production
-/build
+admin/react-admin/build
 
 # misc
 .DS_Store

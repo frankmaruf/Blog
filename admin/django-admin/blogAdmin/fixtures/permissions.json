@@ -17,42 +17,56 @@
     "model": "userHandle.permission",
     "pk": 3,
     "fields": {
-      "name": "view_roles"
+      "name": "create_users"
     }
   },
   {
     "model": "userHandle.permission",
     "pk": 4,
     "fields": {
-      "name": "edit_roles"
+      "name": "create_roles"
     }
   },
   {
     "model": "userHandle.permission",
     "pk": 5,
     "fields": {
-      "name": "view_products"
+      "name": "view_roles"
     }
   },
   {
     "model": "userHandle.permission",
     "pk": 6,
     "fields": {
-      "name": "edit_products"
+      "name": "edit_roles"
     }
   },
   {
     "model": "userHandle.permission",
     "pk": 7,
     "fields": {
-      "name": "view_orders"
+      "name": "view_posts"
     }
   },
   {
     "model": "userHandle.permission",
     "pk": 8,
     "fields": {
-      "name": "edit_orders"
+      "name": "edit_posts"
+    }
+  },
+  {
+    "model": "userHandle.permission",
+    "pk": 9,
+    "fields": {
+      "name": "create_posts"
+    }
+  },
+  {
+    "model": "userHandle.permission",
+    "pk": 10,
+    "fields": {
+      "name": "update_posts"
     }
   }
 ]
