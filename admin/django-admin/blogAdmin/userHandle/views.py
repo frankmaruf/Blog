@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.utils.functional import partition
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import exceptions,generics, serializers
@@ -45,7 +44,7 @@ def login(request):
 
 class AuthenticatedUser(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated & ViewPermissions]
+    permission_classes = [IsAuthenticated]
     def get(self,request):
         data = UserSerializer(request.user).data
         data['permissions'] = [p['name'] for p in data['role']['permissions']]
@@ -55,7 +54,7 @@ class AuthenticatedUser(APIView):
 
 class PermissionAPIView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated & ViewPermissions]
+    permission_classes = [IsAuthenticated ]
     def get(self,request):
         serializer = PermissionSerializer(Permission.objects.all(),many = True)
         return Response({
@@ -64,7 +63,7 @@ class PermissionAPIView(APIView):
 
 class RoleViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated & ViewPermissions]
+    permission_classes = [IsAuthenticated & ViewPermissions ]
     permission_object = 'roles'
 
     def list(self, request):
