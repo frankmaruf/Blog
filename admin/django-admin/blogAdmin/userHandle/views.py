@@ -106,7 +106,7 @@ class UserGenericAPIView(generics.GenericAPIView,mixins.ListModelMixin,
 mixins.RetrieveModelMixin,mixins.CreateModelMixin,
 mixins.UpdateModelMixin,mixins.DestroyModelMixin):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated & ViewPermissions]
+    # permission_classes = [IsAuthenticated & ViewPermissions]
     permission_object = 'users'
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -134,8 +134,8 @@ mixins.UpdateModelMixin,mixins.DestroyModelMixin):
         return Response({
             'data': self.partial_update(request,pk).data
         })
-    def delete(self,request,pk=None):
-        return self.destroy(request,pk).data
+    def delete(self, request, pk=None):
+        return self.destroy(request, pk)
 
 
 class ProfileInfoAPIView(APIView):
