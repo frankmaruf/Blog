@@ -1,17 +1,19 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MyData } from "../Store";
 import axios from "axios";
 import { UserConst } from "../Store/Const/userConst";
 import { Link } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
-import { Table } from "react-bootstrap";
+import { Table, Modal } from "react-bootstrap";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
+import { List, ListItem } from "@material-ui/core";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
 const UsersList = () => {
-  const { state, dispatch } = useContext(MyData);
-
+  const searchButton = useRef();
+  const { state, dispatch } = useContext(MyData); //state value
   const getUsersData = async () => {
     try {
       dispatch({
@@ -55,11 +57,28 @@ const UsersList = () => {
   };
   const deleteHandler = async (id) => {
     await axios.delete(`users/${id}`);
+    setSearchData((people) => {
+      return people.filter((person) => person.id !== id);
+    });
     dispatch({
       type: UserConst.ON_USER_REMOVE,
       payload: id,
     });
   };
+  const inputRef = useRef(null);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    setShow(!show);
+  };
+  useEffect(() => {
+    if (show === true) {
+      inputRef.current.focus();
+    }
+  }, [show]);
+  const [search, setSearch] = useState(""); // input field
+  const [searchData, setSearchData] = useState([]); //the data what we want
+  const url = `users?search=${search}`; //search URL
   return (
     <div>
       {state.loading ? (
@@ -68,6 +87,52 @@ const UsersList = () => {
         <h3>Error</h3>
       ) : (
         <>
+          <div className=" text-right">
+            <Button onClick={handleShow}>Search</Button>
+          </div>
+          <div>
+            <Modal
+              keyboard={true}
+              show={show}
+              onHide={handleClose}
+              backdrop="static"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Search User</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <input
+                  ref={inputRef}
+                  name="search"
+                  onChange={async (e) => {
+                    setSearch(() => e.target.value);
+                    const response = await axios.get(url);
+                    const data = await response.data.data;
+                    setSearchData(data);
+                  }}
+                  value={search}
+                />
+                <List>
+                  {searchData.map((data) => {
+                    return (
+                      <ListItem key={data.id}>
+                        <ListItemAvatar>{actions(data.id)}</ListItemAvatar>
+                        <ListItemText className="ml-2">
+                          {data.email}
+                        </ListItemText>
+                        <ListItemText>@{data.username}</ListItemText>
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </div>
           <Table striped bordered hover size="sm">
             <thead>
               <tr>

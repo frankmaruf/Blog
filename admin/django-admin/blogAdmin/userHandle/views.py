@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import exceptions,generics, serializers
+from rest_framework import filters
 from rest_framework.views import APIView
 from rest_framework import viewsets,status,mixins
 from blogAdmin.pagination import CustomPagination
@@ -111,6 +112,8 @@ mixins.UpdateModelMixin,mixins.DestroyModelMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = CustomPagination
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^username', '^email','^first_name','^last_name']
 
     def get(self,request,pk=None):
         if pk:
