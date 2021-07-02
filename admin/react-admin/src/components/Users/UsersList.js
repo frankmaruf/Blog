@@ -12,7 +12,6 @@ import { List, ListItem } from "@material-ui/core";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 const UsersList = () => {
-  const searchButton = useRef();
   const { state, dispatch } = useContext(MyData); //state value
   const getUsersData = async () => {
     try {
