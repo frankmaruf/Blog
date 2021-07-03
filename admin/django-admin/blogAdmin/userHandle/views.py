@@ -64,7 +64,7 @@ class PermissionAPIView(APIView):
 
 class RoleViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated & ViewPermissions ]
+  #  permission_classes = [IsAuthenticated & ViewPermissions ]
     permission_object = 'roles'
 
     def list(self, request):
@@ -113,7 +113,7 @@ mixins.UpdateModelMixin,mixins.DestroyModelMixin):
     serializer_class = UserSerializer
     pagination_class = CustomPagination
     filter_backends = [filters.SearchFilter]
-    search_fields = ['^username', '^email','^first_name','^last_name']
+    search_fields = ['^username', '^email','^first_name','^last_name','=id']
 
     def get(self,request,pk=None):
         if pk:

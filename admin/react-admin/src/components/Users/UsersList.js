@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MyData } from "../Store";
 import axios from "axios";
 import { UserConst } from "../Store/Const/userConst";
@@ -14,9 +8,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
-import { List, ListItem } from "@material-ui/core";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemText from "@material-ui/core/ListItemText";
+import SearchModal from "../Modal/SearchModal";
+import AddUserModal from "../Modal/AddUserModal";
+import DatePicker from "react-datepicker";
 const UsersList = () => {
   const { state, dispatch } = useContext(MyData); //state value
   const getUsersData = async () => {
@@ -37,10 +31,11 @@ const UsersList = () => {
     }
   };
   useEffect(() => {
-    getUsersData();
+    getUsersData(); //to list all users
   }, []);
 
   const actions = (id) => {
+    //to get two button for delete and edit
     return (
       <>
         <Tooltip title="Delete" arrow>
@@ -60,40 +55,27 @@ const UsersList = () => {
       </>
     );
   };
+  const [searchData, setSearchData] = useState([]); //the search data what we want
   const deleteHandler = async (id) => {
+    //actully delete the users and dispatch the action
     await axios.delete(`users/${id}`);
     setSearchData((people) => {
       return people.filter((person) => person.id !== id);
     });
     dispatch({
-      type: UserConst.ON_USER_REMOVE,
+      type: UserConst.ON_USER_REMOVE, //dispatch
       payload: id,
     });
   };
-  const inputRef = useRef(null);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => {
+  const [show, setShow] = useState(false); //for modal control
+  const [addUsershow, setAddUserShow] = useState(false); //for modal control
+  const handleSearchShow = () => {
+    //to handle the modal
     setShow(!show);
   };
-
-  const [search, setSearch] = useState(""); // input field
-  const [searchData, setSearchData] = useState([]); //the data what we want
-  const url = `users?search=${search}`; //search URL
-  const getSearchData = async () => {
-    const response = await axios.get(url);
-    const data = await response.data.data;
-    setSearchData(data);
+  const handleAddShow = () => {
+    setAddUserShow(!addUsershow);
   };
-  useEffect(() => {
-    if (show === true) {
-      inputRef.current.focus();
-    }
-    if (search) {
-      getSearchData();
-    }
-  }, [show, search]);
-
   return (
     <div>
       {state.loading ? (
@@ -101,50 +83,39 @@ const UsersList = () => {
       ) : state.error ? (
         <h3>Error</h3>
       ) : (
-        <>
-          <div className=" text-right">
-            <Button onClick={handleShow}>Search</Button>
-          </div>
-          <div>
-            <Modal
-              keyboard={true}
-              show={show}
-              onHide={handleClose}
-              backdrop="static"
+        <div className="container-fluid">
+          <div className="row justify-content-between ml-1 mr-1 mt-3">
+            <Button
+              className="col-1 bg-primary text-white"
+              onClick={handleAddShow}
             >
-              <Modal.Header closeButton>
-                <Modal.Title>Search User</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <input
-                  ref={inputRef}
-                  name="search"
-                  onChange={(e) => {
-                    setSearch(() => e.target.value);
-                  }}
-                  value={search}
-                />
-                <List>
-                  {searchData.map((data) => {
-                    return (
-                      <ListItem key={data.id}>
-                        <ListItemAvatar>{actions(data.id)}</ListItemAvatar>
-                        <ListItemText className="ml-2">
-                          {data.email}
-                        </ListItemText>
-                        <ListItemText>@{data.username}</ListItemText>
-                      </ListItem>
-                    );
-                  })}
-                </List>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-              </Modal.Footer>
-            </Modal>
+              Add User
+            </Button>
+            <Button
+              className="col-1 bg-warning text-white"
+              onClick={handleSearchShow}
+            >
+              Search
+            </Button>
           </div>
+          {/* Search Modal */}
+          <div>
+            <SearchModal
+              searchData={searchData}
+              setSearchData={setSearchData}
+              show={show}
+              setShow={setShow}
+              actions={actions}
+            />
+          </div>
+
+          {/* Add User */}
+          <AddUserModal
+            addUsershow={addUsershow}
+            setAddUserShow={setAddUserShow}
+          />
+
+          {/* Users List */}
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
@@ -171,7 +142,7 @@ const UsersList = () => {
               })}
             </tbody>
           </Table>
-        </>
+        </div>
       )}
     </div>
   );

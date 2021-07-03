@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useReducer } from "react";
+import React, { createContext, useReducer } from "react";
 import axios from "axios";
 import { BlogReducer } from "./Reducer/Reducer";
 
@@ -13,18 +13,6 @@ const Store = ({ children }) => {
     user: {},
     loading: true,
     error: false,
-    addUsers: async (value) => {
-      const data = await axios.post(url, value);
-      dispatch({
-        type: "ADD_ARTICLE",
-        payload: data,
-      });
-    },
-    reset: () => {
-      dispatch({
-        type: "REST_ARTICLE",
-      });
-    },
   };
   const [state, dispatch] = useReducer(BlogReducer, initialState);
   return (
