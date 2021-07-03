@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { MyData } from "../Store";
 import axios from "axios";
 import { UserConst } from "../Store/Const/userConst";
@@ -70,14 +76,24 @@ const UsersList = () => {
   const handleShow = () => {
     setShow(!show);
   };
+
+  const [search, setSearch] = useState(""); // input field
+  const [searchData, setSearchData] = useState([]); //the data what we want
+  const url = `users?search=${search}`; //search URL
+  const getSearchData = async () => {
+    const response = await axios.get(url);
+    const data = await response.data.data;
+    setSearchData(data);
+  };
   useEffect(() => {
     if (show === true) {
       inputRef.current.focus();
     }
-  }, [show]);
-  const [search, setSearch] = useState(""); // input field
-  const [searchData, setSearchData] = useState([]); //the data what we want
-  const url = `users?search=${search}`; //search URL
+    if (search) {
+      getSearchData();
+    }
+  }, [show, search]);
+
   return (
     <div>
       {state.loading ? (
@@ -103,11 +119,8 @@ const UsersList = () => {
                 <input
                   ref={inputRef}
                   name="search"
-                  onChange={async (e) => {
+                  onChange={(e) => {
                     setSearch(() => e.target.value);
-                    const response = await axios.get(url);
-                    const data = await response.data.data;
-                    setSearchData(data);
                   }}
                   value={search}
                 />
