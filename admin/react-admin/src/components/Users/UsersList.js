@@ -121,7 +121,6 @@ const UsersList = () => {
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
-                <th>#</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Username</th>
@@ -129,21 +128,18 @@ const UsersList = () => {
               </tr>
             </thead>
             <tbody>
-              {state.users.length > 0 &&
-                state.users &&
-                state.users.map((user) => {
-                  return (
-                    <tr key={user.id}>
-                      <td>{user.id}</td>
-                      <td>
-                        {user.first_name} {user.last_name}
-                      </td>
-                      <td>{user.email}</td>
-                      <td>@{user.username}</td>
-                      <td>{actions(user.id)}</td>
-                    </tr>
-                  );
-                })}
+              {state.users.map((user) => {
+                return (
+                  <tr key={user.id}>
+                    <td>
+                      {user.first_name} {user.last_name}
+                    </td>
+                    <td>{user.email}</td>
+                    <td>@{user.username}</td>
+                    <td>{actions(user.id)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
         </div>
