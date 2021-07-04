@@ -10,7 +10,6 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import SearchModal from "../Modal/SearchModal";
 import AddUserModal from "../Modal/AddUserModal";
-import DatePicker from "react-datepicker";
 const UsersList = () => {
   const { state, dispatch } = useContext(MyData); //state value
   const getUsersData = async () => {
@@ -31,7 +30,10 @@ const UsersList = () => {
     }
   };
   useEffect(() => {
-    getUsersData(); //to list all users
+    //to list all users
+    if (state.users) {
+      getUsersData();
+    }
   }, []);
 
   const actions = (id) => {
@@ -127,19 +129,21 @@ const UsersList = () => {
               </tr>
             </thead>
             <tbody>
-              {state.users.map((user) => {
-                return (
-                  <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td>
-                      {user.first_name} {user.last_name}
-                    </td>
-                    <td>{user.email}</td>
-                    <td>@{user.username}</td>
-                    <td>{actions(user.id)}</td>
-                  </tr>
-                );
-              })}
+              {state.users.length > 0 &&
+                state.users &&
+                state.users.map((user) => {
+                  return (
+                    <tr key={user.id}>
+                      <td>{user.id}</td>
+                      <td>
+                        {user.first_name} {user.last_name}
+                      </td>
+                      <td>{user.email}</td>
+                      <td>@{user.username}</td>
+                      <td>{actions(user.id)}</td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </Table>
         </div>

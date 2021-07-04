@@ -12,7 +12,7 @@ export const BlogReducer = (state, { type, payload }) => {
     case UserConst.ON_USER_ADD_FAIL:
       return { ...state, loading: false, error: true };
     case UserConst.ON_USER_ADD_SUCCESS:
-      return { ...state, users: payload };
+      return { ...state, users: [...state.users, payload] };
     case UserConst.ON_USER_REMOVE:
       const newUserList = state.users.filter((user) => user.id !== payload);
       return { ...state, users: newUserList };

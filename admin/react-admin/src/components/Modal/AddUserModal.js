@@ -37,18 +37,14 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
       date_of_birth: date[0],
       username: person.username,
     };
-    try {
-      const user = await axios.post("users", value);
-      dispatch({
-        type: UserConst.ON_USER_ADD_SUCCESS,
-        payload: user,
-      });
-    } catch (error) {
-      dispatch({
-        type: UserConst.ON_USER_ADD_FAIL,
-      });
-    }
+
+    await axios.post("users", value);
+    dispatch({
+      type: UserConst.ON_USER_ADD_SUCCESS,
+      payload: value,
+    });
   };
+
   const handleClose = () => setAddUserShow(false);
   const getRoles = async () => {
     const response = await axios.get("roles");
