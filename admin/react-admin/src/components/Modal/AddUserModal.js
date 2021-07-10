@@ -53,7 +53,7 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
   };
   useEffect(() => {
     getRoles();
-  }, []);
+  }, [dispatch]);
   return (
     <div>
       <Modal
@@ -175,4 +175,4 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
   );
 };
 
-export default AddUserModal;
+export default React.memo(AddUserModal);

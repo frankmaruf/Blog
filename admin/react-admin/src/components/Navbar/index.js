@@ -1,13 +1,25 @@
 import React from "react";
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
+import {FaShoppingCart, FaUser} from "react-icons/fa"
+import {NavLink} from "react-router-dom"
+import {useDispatch,useSelector} from "react-redux"
+import axios from 'axios';
+import { logout } from "../actions/userAction";
 const MyNavbar = () => {
+  const userLogin = useSelector(state => state.userLogin)
+    const {userJWT} = userLogin
+    const dispatch = useDispatch()
+    const logoutHandler = async() =>{
+      await axios.post('logout', {});
+        dispatch(logout())
+    }
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <LinkContainer to="/">
+        <NavLink to="/">
           <Navbar.Brand>Maruf's Blog</Navbar.Brand>
-        </LinkContainer>
+        </NavLink>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
@@ -27,13 +39,15 @@ const MyNavbar = () => {
               title="Get More"
               id="collasible-nav-dropdown"
             >
-              <LinkContainer to="/feedback">
+              <NavLink to="/feedback">
                 <NavDropdown.Item>Feedback</NavDropdown.Item>
-              </LinkContainer>
+              </NavLink>
               <NavDropdown.Divider />
-              <LinkContainer to="/contact_us">
+              <NavLink to="/contact_us">
                 <NavDropdown.Item>Contact us</NavDropdown.Item>
-              </LinkContainer>
+              </NavLink>
+              {userJWT ? ( <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+              ):<a href="/login">Login</a>}
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

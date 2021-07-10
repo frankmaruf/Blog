@@ -20,4 +20,4 @@ const Store = ({ children }) => {
   );
 };
 
-export default Store;
+export default React.memo(Store);

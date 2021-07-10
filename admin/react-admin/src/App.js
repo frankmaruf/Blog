@@ -5,6 +5,9 @@ import MyFooter from "./components/Footer";
 import Store from "./components/Store";
 import UsersList from "./components/Users/UsersList";
 import Test from "./components/Test";
+import React from "react"
+import Login from "./components/Login";
+
 function App() {
   return (
     <>
@@ -14,6 +17,7 @@ function App() {
           <Switch>
             <Route exact component={UsersList} path="/users" />
             <Route exact component={Test} path="/test" />
+            <Route exact component={Login} path="/login"/>
           </Switch>
         </Store>
         <MyFooter />

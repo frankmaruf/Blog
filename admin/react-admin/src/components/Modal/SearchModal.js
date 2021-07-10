@@ -1,14 +1,5 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { MyData } from "../Store";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { UserConst } from "../Store/Const/userConst";
-import { Link } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import Button from "@material-ui/core/Button";
 import { List, ListItem } from "@material-ui/core";
@@ -80,4 +71,4 @@ const SearchModal = ({ actions, show, setShow, searchData, setSearchData }) => {
   );
 };
 
-export default SearchModal;
+export default React.memo(SearchModal);
