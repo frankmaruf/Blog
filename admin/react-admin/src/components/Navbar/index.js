@@ -9,7 +9,8 @@ import { logout } from "../actions/userAction";
 const MyNavbar = () => {
   const userLogin = useSelector(state => state.userLogin)
     const {userJWT,user} = userLogin
-console.log("User from storage",user);
+    console.log(JSON.parse(localStorage.getItem("user")));
+    console.log("from state",user);
     const dispatch = useDispatch()
     const logoutHandler = async() =>{
         dispatch(logout())
@@ -46,9 +47,9 @@ console.log("User from storage",user);
               <NavLink to="/contact_us">
                 <NavDropdown.Item>Contact us</NavDropdown.Item>
               </NavLink>
-              {userJWT ? ( 
-              <NavDropdown title="Hello">
-                <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+              {user ? ( 
+              <NavDropdown title={user.first_name}>
+                <NavDropdown.Item onClick={logoutHandler}>{user.first_name}</NavDropdown.Item>
                 </NavDropdown>
               ):<Link to="/login">
                 <FiLogOut/>Login

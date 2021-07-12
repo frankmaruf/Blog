@@ -70,9 +70,8 @@ export const authenticateUserDetailsReducer = (state = { }, action) => {
     switch (action.type) {
         case AUTHENTICATE_USER_DETAILS_REQUEST:
             return { ...state, loading: true }
-
         case AUTHENTICATE_USER_DETAILS_SUCCESS:
-            return { loading: false, user: action.payload }
+            return { loading: false, user : action.payload }
         case AUTHENTICATE_USER_DETAILS_FAIL:
             return { loading: false, error: action.payload }
         case AUTHENTICATE_USER_DETAILS_RESET:

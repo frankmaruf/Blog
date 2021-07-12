@@ -91,9 +91,7 @@ export const AuthenticateUserDetail = () => async (dispatch, getState) => {
             type: AUTHENTICATE_USER_DETAILS_SUCCESS,
             payload: user
         })
-        console.log("from Action",user);
-        localStorage.setItem(' AuthenticateUser', JSON.stringify(user))
-
+        localStorage.setItem('user', JSON.stringify(user))
     } catch (error) {
         dispatch({
             type: AUTHENTICATE_USER_DETAILS_FAIL,

@@ -29,6 +29,10 @@ const handleFormSubmit = async event => {
       ...data,
     });
     dispatch(login(data.username, data.password))
+    .then(() => {
+      dispatch(AuthenticateUserDetail())
+    } )
+    
 }
   if(userJWT){
            return <Redirect to="/users"/>
