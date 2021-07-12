@@ -8,7 +8,7 @@ from rest_framework.authentication import BaseAuthentication
 def generate_assess_token(user):
     payload = {
         'user_id' : user.id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=5),
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(days=5),
         'iat': datetime.datetime.utcnow()
     }
 

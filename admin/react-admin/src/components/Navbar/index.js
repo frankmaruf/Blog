@@ -2,16 +2,16 @@ import React from "react";
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import {FaShoppingCart, FaUser} from "react-icons/fa"
-import {NavLink} from "react-router-dom"
+import {FiLogOut} from "react-icons/fi"
+import {NavLink,Link} from "react-router-dom"
 import {useDispatch,useSelector} from "react-redux"
-import axios from 'axios';
 import { logout } from "../actions/userAction";
 const MyNavbar = () => {
   const userLogin = useSelector(state => state.userLogin)
-    const {userJWT} = userLogin
+    const {userJWT,user} = userLogin
+console.log("User from storage",user);
     const dispatch = useDispatch()
     const logoutHandler = async() =>{
-      await axios.post('logout', {});
         dispatch(logout())
     }
   return (
@@ -46,8 +46,13 @@ const MyNavbar = () => {
               <NavLink to="/contact_us">
                 <NavDropdown.Item>Contact us</NavDropdown.Item>
               </NavLink>
-              {userJWT ? ( <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
-              ):<a href="/login">Login</a>}
+              {userJWT ? ( 
+              <NavDropdown title="Hello">
+                <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+                </NavDropdown>
+              ):<Link to="/login">
+                <FiLogOut/>Login
+              </Link>}
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

@@ -14,7 +14,10 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import SearchModal from "../Modal/SearchModal";
 import AddUserModal from "../Modal/AddUserModal";
+import {useDispatch,useSelector} from "react-redux"
+import { AuthenticateUserDetail } from "../actions/userAction";
 const UsersList = () => {
+  const dispatche = useDispatch()
   const { state, dispatch } = useContext(MyData); //state value
   const getUsersData = async () => {
     try {
@@ -38,6 +41,7 @@ const UsersList = () => {
     if (state.users) {
       getUsersData();
     }
+    dispatche(AuthenticateUserDetail())
   }, []);
 
   const actions = (id) => {

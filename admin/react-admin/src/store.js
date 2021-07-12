@@ -6,15 +6,18 @@ import {userLoginReducers} from "./components/reducers/userReducers"
 const reducer = combineReducers({
   userLogin: userLoginReducers,
 });
+
 const userJWTFromStorage = localStorage.getItem("userJWT")
   ? JSON.parse(localStorage.getItem("userJWT"))
   : null;
 
+const AuthenticateUserFromStorage = localStorage.getItem("AuthenticateUser")
+  ? JSON.parse(localStorage.getItem("AuthenticateUser"))
+  : null;
 
   const initialState = {
-  userLogin: { userJWT: userJWTFromStorage },
+  userLogin: { userJWT: userJWTFromStorage, user:AuthenticateUserFromStorage  },
 };
-
 const middleware = [thunk];
 
 const store = createStore(

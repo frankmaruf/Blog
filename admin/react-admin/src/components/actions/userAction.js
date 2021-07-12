@@ -6,6 +6,10 @@ import {
     USER_REGISTER_REQUEST,
     USER_REGISTER_SUCCESS,
     USER_REGISTER_FAIL,
+    AUTHENTICATE_USER_DETAILS_REQUEST,
+    AUTHENTICATE_USER_DETAILS_SUCCESS,
+    AUTHENTICATE_USER_DETAILS_FAIL,
+    AUTHENTICATE_USER_DETAILS_RESET,
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
     USER_DETAILS_FAIL,
@@ -64,12 +68,94 @@ export const login = (username, password) => async (dispatch) => {
 }
 
 
-export const logout =() => (dispatch) => {
+export const AuthenticateUserDetail = () => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: AUTHENTICATE_USER_DETAILS_REQUEST
+        })
+        const jwt = getState().userLogin.userJWT
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${jwt}`
+            }
+        }
+
+        const response = await axios.get(
+            'user',
+            config
+        )
+        const user = response.data.data
+
+        dispatch({
+            type: AUTHENTICATE_USER_DETAILS_SUCCESS,
+            payload: user
+        })
+        console.log("from Action",user);
+        localStorage.setItem(' AuthenticateUser', JSON.stringify(user))
+
+    } catch (error) {
+        dispatch({
+            type: AUTHENTICATE_USER_DETAILS_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+
+export const getUserDetails = (id) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_DETAILS_REQUEST
+        })
+
+        const {
+            userLogin: { userInfo },
+        } = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.get(
+            `/api/users/${id}/`,
+            config
+        )
+
+        dispatch({
+            type: USER_DETAILS_SUCCESS,
+            payload: data
+        })
+
+
+    } catch (error) {
+        dispatch({
+            type: USER_DETAILS_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+
+
+export const logout =() => async (dispatch) => {
     localStorage.removeItem('userJWT')
+    localStorage.removeItem('AuthenticateUser')
+    await axios.post('logout', {});
     dispatch(
         {
             type: USER_LOGOUT
         }
     )
+    dispatch({
+            type: AUTHENTICATE_USER_DETAILS_RESET
+        })
     
 }
