@@ -145,7 +145,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 
 export const logout =() => async (dispatch) => {
     localStorage.removeItem('userJWT')
-    localStorage.removeItem('AuthenticateUser')
+    localStorage.removeItem('user')
     await axios.post('logout', {});
     dispatch(
         {

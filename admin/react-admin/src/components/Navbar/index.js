@@ -1,20 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import {FaShoppingCart, FaUser} from "react-icons/fa"
 import {FiLogOut} from "react-icons/fi"
 import {NavLink,Link} from "react-router-dom"
 import {useDispatch,useSelector} from "react-redux"
-import { logout } from "../actions/userAction";
+import { AuthenticateUserDetail, logout } from "../actions/userAction";
+import { Button } from "@material-ui/core";
 const MyNavbar = () => {
   const userLogin = useSelector(state => state.userLogin)
-    const {userJWT,user} = userLogin
-    console.log(JSON.parse(localStorage.getItem("user")));
-    console.log("from state",user);
+    const {user,isAuthenticated} = userLogin
+    console.log("from Navbar",isAuthenticated);
     const dispatch = useDispatch()
     const logoutHandler = async() =>{
         dispatch(logout())
     }
+    useEffect(() => {
+      if (isAuthenticated) {
+        window.location.reload(false);
+      }
+    } , [isAuthenticated])
   return (
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -33,8 +38,6 @@ const MyNavbar = () => {
             <LinkContainer to="/users">
               <Nav.Link>Users</Nav.Link>
             </LinkContainer>
-          </Nav>
-          <Nav className="ml-auto">
             <NavDropdown
               className="navbar-right"
               title="Get More"
@@ -47,14 +50,22 @@ const MyNavbar = () => {
               <NavLink to="/contact_us">
                 <NavDropdown.Item>Contact us</NavDropdown.Item>
               </NavLink>
-              {user ? ( 
-              <NavDropdown title={user.first_name}>
-                <NavDropdown.Item onClick={logoutHandler}>{user.first_name}</NavDropdown.Item>
-                </NavDropdown>
-              ):<Link to="/login">
-                <FiLogOut/>Login
-              </Link>}
-            </NavDropdown>
+              </NavDropdown>
+             {user ? (
+        <NavDropdown title={user.first_name} id='username'>
+            <LinkContainer to="/profile">
+                <NavDropdown.Item>
+                  Profile
+                </NavDropdown.Item>
+            </LinkContainer>
+            <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+        </NavDropdown>
+      ) : (
+        <LinkContainer to="/login">
+        <Nav.Link><FaUser/>Login</Nav.Link>
+        </LinkContainer>
+      )}
+            
           </Nav>
         </Navbar.Collapse>
       </Navbar>

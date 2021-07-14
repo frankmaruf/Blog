@@ -41,7 +41,6 @@ const UsersList = () => {
     if (state.users) {
       getUsersData();
     }
-    dispatche(AuthenticateUserDetail())
   }, []);
 
   const actions = (id) => {

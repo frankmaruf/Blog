@@ -12,8 +12,7 @@ const userJWTFromStorage = localStorage.getItem("userJWT")
   ? JSON.parse(localStorage.getItem("userJWT"))
   : null;
 
-const UserFromStorage = JSON.parse(localStorage.getItem("user"))
-
+const UserFromStorage = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
   const initialState = {
   userLogin: { userJWT: userJWTFromStorage,user:UserFromStorage },
 };
