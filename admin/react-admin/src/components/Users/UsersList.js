@@ -1,11 +1,7 @@
 import React, {
-  useContext,
   useEffect,
   useState,
 } from "react";
-import { MyData } from "../Store";
-import axios from "axios";
-import { UserConst } from "../Store/Const/userConst";
 import { Link } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -16,19 +12,15 @@ import SearchModal from "../Modal/SearchModal";
 import AddUserModal from "../Modal/AddUserModal";
 import {useDispatch,useSelector} from "react-redux"
 import { deleteUser, listUsers } from "../actions/userAction";
-import { AuthenticateUserDetail } from "../actions/userAction";
 const UsersList = () => {
   const dispatche = useDispatch()
   const userList = useSelector(state => state.userList)
   const {loading,error,users} = userList
-  const { state, dispatch } = useContext(MyData); //state value
   useEffect(() => {
-    //to list all users
     dispatche(listUsers())
   }, []);
 
   const actions = (id) => {
-    //to get two button for delete and edit
     return (
       <>
         <Tooltip title="Delete" arrow>

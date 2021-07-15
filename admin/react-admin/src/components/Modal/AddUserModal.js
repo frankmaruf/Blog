@@ -40,6 +40,14 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
       username: person.username,
     };
     dispatch(userAddedByAdmin(value))
+    setPerson({
+      first_name: "",
+    last_name: "",
+    email: "",
+    role_id: 0,
+    date_of_birth: new Date(),
+    username: "",
+    })
   };
 
   const handleClose = () => setAddUserShow(false);

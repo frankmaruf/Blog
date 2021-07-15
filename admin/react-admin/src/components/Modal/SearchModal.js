@@ -9,7 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 const SearchModal = ({ actions, show, setShow, searchData, setSearchData }) => {
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
-  const inputRef = useRef(null); //to fucus input field current.focus()
+  const inputRef = useRef(null); //to focus input field current.focus()
   const handleClose = () => setShow(false); //for close modal
   const [search, setSearch] = useState(""); // for input field
   const url = `users?search=${search}`; // default search URL
