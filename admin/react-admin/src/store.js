@@ -2,10 +2,15 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import {userLoginReducers,authenticateUserDetailsReducer} from "./components/reducers/userReducers"
+import {userLoginReducers,authenticateUserDetailsReducer,
+userListReducer,
+userDeleteReducer
+} from "./components/reducers/userReducers"
 const reducer = combineReducers({
   userLogin: userLoginReducers,
   authenticateUser:authenticateUserDetailsReducer,
+  userList:userListReducer,
+  userDelete: userDeleteReducer
 });
 
 const userJWTFromStorage = localStorage.getItem("userJWT")

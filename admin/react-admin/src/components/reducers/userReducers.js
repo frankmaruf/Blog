@@ -6,6 +6,10 @@ import {
     USER_REGISTER_REQUEST,
     USER_REGISTER_SUCCESS,
     USER_REGISTER_FAIL,
+    USER_ADDED_BY_ADMIN_REGISTER_REQUEST,
+    USER_ADDED_BY_ADMIN_REGISTER_SUCCESS,
+    USER_ADDED_BY_ADMIN_REGISTER_FAIL,
+    USER_ADDED_BY_ADMIN_REGISTER_RESET,
     AUTHENTICATE_USER_DETAILS_REQUEST,
     AUTHENTICATE_USER_DETAILS_SUCCESS,
     AUTHENTICATE_USER_DETAILS_FAIL,
@@ -21,7 +25,9 @@ import {
     USER_LIST_REQUEST,
     USER_LIST_SUCCESS,
     USER_LIST_FAIL,
+    USER_LIST_UPDATE,
     USER_LIST_RESET,
+    USER_DELETE_AND_LIST_UPDATE,
     USER_DELETE_REQUEST,
     USER_DELETE_SUCCESS,
     USER_DELETE_FAIL,
@@ -124,6 +130,7 @@ export const userUpdateProfileReducer = (state = {}, action) => {
 
 
 export const userListReducer = (state = {users:[]}, action) => {
+    const newUserList = state.users.filter((user) => user.id !== action.payload);
     switch (action.type) {
         case USER_LIST_REQUEST:
             return {loading: true }
@@ -131,12 +138,33 @@ export const userListReducer = (state = {users:[]}, action) => {
         case USER_LIST_SUCCESS:
             return { loading: false,users: action.payload }
 
+        case USER_LIST_UPDATE:
+            return { users: [...state.users,action.payload] }
+        case USER_DELETE_AND_LIST_UPDATE:
+            return { ...state, users: newUserList }
         case USER_LIST_FAIL:
             return { loading: false, error: action.payload }
 
         case USER_LIST_RESET:
             return { users:[] }
 
+        default:
+            return state
+    }
+}
+export const userAddedByAdminReducer = (state = {}, action) => {
+    switch (action.type) {
+        case USER_ADDED_BY_ADMIN_REGISTER_REQUEST:
+            return {loading: true }
+
+        case USER_ADDED_BY_ADMIN_REGISTER_SUCCESS:
+            return { loading: false,user: action.payload }
+
+        case USER_ADDED_BY_ADMIN_REGISTER_FAIL:
+            return { loading: false, error: action.payload }
+
+        case USER_ADDED_BY_ADMIN_REGISTER_RESET:
+            return { user:[] }
         default:
             return state
     }

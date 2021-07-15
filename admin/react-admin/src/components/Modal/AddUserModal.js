@@ -4,11 +4,13 @@ import Button from "@material-ui/core/Button";
 import { Form, Col } from "react-bootstrap";
 import { MyData } from "../Store";
 import { UserConst } from "../Store/Const/userConst";
+import {useDispatch,useSelector} from "react-redux"
 import axios from "axios";
 import DatePicker from "react-date-picker";
+import { userAddedByAdmin } from "../actions/userAction";
 
 const AddUserModal = ({ addUsershow, setAddUserShow }) => {
-  const { state, dispatch } = useContext(MyData); //state value
+  const dispatch = useDispatch()
   const [roles, setRoles] = useState([]);
   const [person, setPerson] = useState({
     first_name: "",
@@ -37,19 +39,13 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
       date_of_birth: date[0],
       username: person.username,
     };
-
-    await axios.post("users", value);
-    dispatch({
-      type: UserConst.ON_USER_ADD_SUCCESS,
-      payload: value,
-    });
+    dispatch(userAddedByAdmin(value))
   };
 
   const handleClose = () => setAddUserShow(false);
   const getRoles = async () => {
     const response = await axios.get("roles");
     setRoles(response.data.data);
-    console.log(response.data.data);
   };
   useEffect(() => {
     getRoles();
@@ -175,4 +171,4 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
   );
 };
 
-export default React.memo(AddUserModal);
+export default AddUserModal;

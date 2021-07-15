@@ -7,13 +7,21 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 
 const SearchModal = ({ actions, show, setShow, searchData, setSearchData }) => {
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
   const inputRef = useRef(null); //to fucus input field current.focus()
   const handleClose = () => setShow(false); //for close modal
   const [search, setSearch] = useState(""); // for input field
   const url = `users?search=${search}`; // default search URL
   const getSearchData = async () => {
     //for getting the the search data with async
-    const response = await axios.get(url); // interconnect with url for search data
+    const response = await axios.get(url, {
+  cancelToken: source.token
+}).catch(function (thrown){
+  if (axios.isCancel(thrown)){
+    console.log('Request canceled', thrown.message);
+  }
+})// interconnect with url for search data
     const data = await response.data.data; //getting the response data
     setSearchData(data); //setting the search data
   };
@@ -45,6 +53,7 @@ const SearchModal = ({ actions, show, setShow, searchData, setSearchData }) => {
               name="search"
               onChange={(e) => {
                 setSearch(() => e.target.value);
+                
               }}
               value={search}
             />

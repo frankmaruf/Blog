@@ -15,32 +15,16 @@ import Tooltip from "@material-ui/core/Tooltip";
 import SearchModal from "../Modal/SearchModal";
 import AddUserModal from "../Modal/AddUserModal";
 import {useDispatch,useSelector} from "react-redux"
+import { deleteUser, listUsers } from "../actions/userAction";
 import { AuthenticateUserDetail } from "../actions/userAction";
 const UsersList = () => {
   const dispatche = useDispatch()
+  const userList = useSelector(state => state.userList)
+  const {loading,error,users} = userList
   const { state, dispatch } = useContext(MyData); //state value
-  const getUsersData = async () => {
-    try {
-      dispatch({
-        type: UserConst.ON_USERS_LIST_LOADING,
-      });
-      const response = await axios.get("users");
-      const users = await response.data.data;
-      dispatch({
-        type: UserConst.ON_USERS_LIST_SUCCESS,
-        payload: users,
-      });
-    } catch (error) {
-      dispatch({
-        type: UserConst.ON_USERS_LIST_FAIL,
-      });
-    }
-  };
   useEffect(() => {
     //to list all users
-    if (state.users) {
-      getUsersData();
-    }
+    dispatche(listUsers())
   }, []);
 
   const actions = (id) => {
@@ -64,22 +48,16 @@ const UsersList = () => {
       </>
     );
   };
-  const [searchData, setSearchData] = useState([]); //the search data what we want
+  const [searchData, setSearchData] = useState([]);
   const deleteHandler = async (id) => {
-    //actully delete the users and dispatch the action
-    await axios.delete(`users/${id}`);
     setSearchData((people) => {
       return people.filter((person) => person.id !== id);
     });
-    dispatch({
-      type: UserConst.ON_USER_REMOVE, //dispatch
-      payload: id,
-    });
+    dispatche(deleteUser(id))
   };
-  const [show, setShow] = useState(false); //for modal control
-  const [addUsershow, setAddUserShow] = useState(false); //for modal control
+  const [show, setShow] = useState(false);
+  const [addUsershow, setAddUserShow] = useState(false);
   const handleSearchShow = () => {
-    //to handle the modal
     setShow(!show);
   };
   const handleAddShow = () => {
@@ -87,9 +65,9 @@ const UsersList = () => {
   };
   return (
     <div>
-      {state.loading ? (
+      {loading ? (
         <h3>Loading....</h3>
-      ) : state.error ? (
+      ) : error ? (
         <h3>Error</h3>
       ) : (
         <div className="container-fluid">
@@ -135,7 +113,7 @@ const UsersList = () => {
               </tr>
             </thead>
             <tbody>
-              {state.users.map((user) => {
+              {users.map((user) => {
                 return (
                   <tr key={user.id}>
                     <td>

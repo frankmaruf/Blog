@@ -6,9 +6,11 @@ import App from "./App";
 import axios from "axios";
 import {Provider} from 'react-redux'
 import store from "./store";
-
-axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem('userJWT')}`;
 const url = "http://localhost:8000/api/";
+axios.defaults.baseURL = url;
+axios.defaults.withCredentials = true;
+axios.defaults.headers.Authorization = `Bearer ${localStorage.getItem('userJWT')}`;
+axios.defaults.headers.common['Authorization'] = localStorage.getItem('userJWT');
 axios.defaults.baseURL = url;
 axios.defaults.withCredentials = true;
 ReactDOM.render(
