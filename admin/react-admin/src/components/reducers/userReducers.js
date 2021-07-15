@@ -130,7 +130,6 @@ export const userUpdateProfileReducer = (state = {}, action) => {
 
 
 export const userListReducer = (state = {users:[]}, action) => {
-    const newUserList = state.users.filter((user) => user.id !== action.payload);
     switch (action.type) {
         case USER_LIST_REQUEST:
             return {loading: true }
@@ -141,7 +140,7 @@ export const userListReducer = (state = {users:[]}, action) => {
         case USER_LIST_UPDATE:
             return { users: [...state.users,action.payload] }
         case USER_DELETE_AND_LIST_UPDATE:
-            return { ...state, users: newUserList }
+            return { ...state, users: action.payload }
         case USER_LIST_FAIL:
             return { loading: false, error: action.payload }
 

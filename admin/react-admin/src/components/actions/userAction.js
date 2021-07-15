@@ -26,6 +26,7 @@ import {
     USER_LIST_SUCCESS,
     USER_LIST_FAIL,
     USER_LIST_UPDATE,
+    USER_DELETE_AND_LIST_UPDATE,
     USER_LIST_RESET,
     USER_DELETE_REQUEST,
     USER_DELETE_SUCCESS,
@@ -249,6 +250,13 @@ export const deleteUser = (id) => async (dispatch, getState) => {
         dispatch({
             type: USER_DELETE_SUCCESS,
             payload: data
+        })
+        const users = getState().userList.users
+        
+        const newUserList = users.filter((user) => user.id !== id);
+        dispatch({
+            type: USER_DELETE_AND_LIST_UPDATE,
+            payload: newUserList
         })
 
     } catch (error) {
