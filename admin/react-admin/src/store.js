@@ -2,13 +2,13 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import {userLoginReducers,authenticateUserDetailsReducer,
+import {userLoginReducers,
 userListReducer,
 userDeleteReducer
 } from "./components/reducers/userReducers"
 const reducer = combineReducers({
   userLogin: userLoginReducers,
-  authenticateUser:authenticateUserDetailsReducer,
+  // authenticateUser:authenticateUserDetailsReducer,
   userList:userListReducer,
   userDelete: userDeleteReducer
 });
@@ -17,7 +17,7 @@ const userJWTFromStorage = localStorage.getItem("userJWT")
   ? JSON.parse(localStorage.getItem("userJWT"))
   : null;
 
-const UserFromStorage = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+const UserFromStorage = JSON.parse(localStorage.getItem("user"));
   const initialState = {
   userLogin: { userJWT: userJWTFromStorage,user:UserFromStorage },
 };

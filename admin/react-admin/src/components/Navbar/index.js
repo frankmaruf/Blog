@@ -1,74 +1,62 @@
 import React, { useEffect } from "react";
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import {FaShoppingCart, FaUser} from "react-icons/fa"
-import {FiLogOut} from "react-icons/fi"
+import {FaShoppingCart, FaSignOutAlt, FaTags, FaUser} from "react-icons/fa"
+import {GrBlog} from "react-icons/gr"
+import {FiUsers} from "react-icons/fi"
+import {BiBorderAll} from "react-icons/bi"
 import {NavLink,Link} from "react-router-dom"
 import {useDispatch,useSelector} from "react-redux"
-import { AuthenticateUserDetail, logout } from "../actions/userAction";
-import { Button } from "@material-ui/core";
+import { logout } from "../actions/userAction";
 const MyNavbar = () => {
   const userLogin = useSelector(state => state.userLogin)
-    const {user,isAuthenticated} = userLogin
-    console.log("from Navbar",isAuthenticated);
+    const {user} = userLogin
     const dispatch = useDispatch()
     const logoutHandler = async() =>{
         dispatch(logout())
     }
-    useEffect(() => {
-      if (isAuthenticated) {
-        window.location.reload(false);
-      }
-    } , [isAuthenticated])
   return (
     <div>
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <NavLink to="/">
-          <Navbar.Brand>Maruf's Blog</Navbar.Brand>
-        </NavLink>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <LinkContainer to="/category">
-              <Nav.Link>Category</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/tag">
-              <Nav.Link>Tag</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/users">
-              <Nav.Link>Users</Nav.Link>
-            </LinkContainer>
-            <NavDropdown
-              className="navbar-right"
-              title="Get More"
-              id="collasible-nav-dropdown"
-            >
-              <NavLink to="/feedback">
-                <NavDropdown.Item>Feedback</NavDropdown.Item>
-              </NavLink>
-              <NavDropdown.Divider />
-              <NavLink to="/contact_us">
-                <NavDropdown.Item>Contact us</NavDropdown.Item>
-              </NavLink>
-              </NavDropdown>
-             {user ? (
-        <NavDropdown title={user.first_name} id='username'>
-            <LinkContainer to="/profile">
+      <header>
+            <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+            <Container>
+      <NavLink to="/">
+      <Navbar.Brand><GrBlog style={{background:"#03fce3",width:"45px",borderRadius:"5px"}}/>Maruf's Blog</Navbar.Brand>
+      </NavLink>
+  <Navbar.Toggle aria-controls="basic-navbar-nav" />
+  <Navbar.Collapse id="basic-navbar-nav">
+    <Nav className="ml-auto">
+      <LinkContainer to="/category">
+      <Nav.Link><BiBorderAll/>Category</Nav.Link></LinkContainer>
+      <LinkContainer to="/tag">
+      <Nav.Link><FaTags/>Tag</Nav.Link></LinkContainer>
+      {user && (
+        <LinkContainer to="/users">
+      <Nav.Link><FiUsers/>Users</Nav.Link></LinkContainer>
+        )
+      }
+
+      {user ? (
+        <NavDropdown title={user.last_name} id='username'>
+            <LinkContainer to="/user">
                 <NavDropdown.Item>
+                  <FaUser/>
                   Profile
                 </NavDropdown.Item>
             </LinkContainer>
-            <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+            <NavDropdown.Item onClick={logoutHandler}><FaSignOutAlt/> Logout</NavDropdown.Item>
         </NavDropdown>
       ) : (
         <LinkContainer to="/login">
         <Nav.Link><FaUser/>Login</Nav.Link>
         </LinkContainer>
       )}
-            
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+    </Nav>
+    
+  </Navbar.Collapse>
+  </Container>
+</Navbar>
+            </header>
     </div>
   );
 };

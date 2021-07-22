@@ -1,8 +1,13 @@
 import React, {
+  useContext,
   useEffect,
   useState,
+  useCallback,
 } from "react";
-import { Link } from "react-router-dom";
+import { MyData } from "../Store";
+import axios from "axios";
+import { UserConst } from "../Store/Const/userConst";
+import { Link, Redirect } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
@@ -12,15 +17,19 @@ import SearchModal from "../Modal/SearchModal";
 import AddUserModal from "../Modal/AddUserModal";
 import {useDispatch,useSelector} from "react-redux"
 import { deleteUser, listUsers } from "../actions/userAction";
+import { AuthenticateUserDetail } from "../actions/userAction";
 const UsersList = () => {
   const dispatche = useDispatch()
   const userList = useSelector(state => state.userList)
   const {loading,error,users} = userList
+  const { state, dispatch } = useContext(MyData); //state value
   useEffect(() => {
+    //to list all users
     dispatche(listUsers())
   }, []);
 
   const actions = (id) => {
+    //to get two button for delete and edit
     return (
       <>
         <Tooltip title="Delete" arrow>
@@ -55,6 +64,29 @@ const UsersList = () => {
   const handleAddShow = () => {
     setAddUserShow(!addUsershow);
   };
+  const memoizedCallback = useCallback(
+  () => {
+    setShow();
+  },
+  [show],
+);
+  const memoizedActions = useCallback(
+  () => {
+    actions();
+  },
+  [],
+);
+  const memoizedAddShow = useCallback(
+  () => {
+    handleAddShow();
+  },
+  [],
+);
+const userLogin = useSelector(state => state.userLogin)
+    const {user} = userLogin
+    if(!user){
+        return <Redirect to="/login" />
+    }
   return (
     <div>
       {loading ? (
@@ -66,7 +98,7 @@ const UsersList = () => {
           <div className="row justify-content-between ml-1 mr-1 mt-3">
             <Button
               className="col-1 bg-primary text-white"
-              onClick={handleAddShow}
+              onClick={memoizedAddShow}
             >
               Add User
             </Button>
@@ -83,7 +115,7 @@ const UsersList = () => {
               searchData={searchData}
               setSearchData={setSearchData}
               show={show}
-              setShow={setShow}
+              setShow={memoizedCallback}
               actions={actions}
             />
           </div>

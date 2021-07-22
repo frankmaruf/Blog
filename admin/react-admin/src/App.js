@@ -7,15 +7,18 @@ import UsersList from "./components/Users/UsersList";
 import Test from "./components/Test";
 import React from "react"
 import Login from "./components/Login";
+import Profile from "./components/Users/Profile";
+import User from "./components/Users/User";
 
 function App() {
   return (
     <>
       <Router>
-        <MyNavbar />
         <Store>
+            <MyNavbar />
           <Switch>
             <Route exact component={UsersList} path="/users" />
+            <Route exact component={Profile} path="/user" />
             <Route exact component={Test} path="/test" />
             <Route exact component={Login} path="/login"/>
           </Switch>

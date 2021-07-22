@@ -10,10 +10,6 @@ import {
     USER_ADDED_BY_ADMIN_REGISTER_SUCCESS,
     USER_ADDED_BY_ADMIN_REGISTER_FAIL,
     USER_ADDED_BY_ADMIN_REGISTER_RESET,
-    AUTHENTICATE_USER_DETAILS_REQUEST,
-    AUTHENTICATE_USER_DETAILS_SUCCESS,
-    AUTHENTICATE_USER_DETAILS_FAIL,
-    AUTHENTICATE_USER_DETAILS_RESET,
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
     USER_DETAILS_FAIL,
@@ -40,11 +36,12 @@ import {
 
 
 export const userLoginReducers = (state = {}, action) => {
+    console.log(action.payload);
     switch(action.type){
         case USER_LOGIN_REQUEST:
             return {loading:true}
         case USER_LOGIN_SUCCESS:
-            return {loading:false,userJWT:action.payload,isAuthenticated: true,}
+            return {loading:false,userJWT:action.payload.jwt,user:action.payload.user}
         case USER_LOGIN_FAIL:
             return {loading:false,error: action.payload}
         case USER_LOGOUT:
@@ -72,20 +69,6 @@ export const userRegisterReducers = (state = {}, action) => {
 
 }
 
-export const authenticateUserDetailsReducer = (state = { }, action) => {
-    switch (action.type) {
-        case AUTHENTICATE_USER_DETAILS_REQUEST:
-            return { ...state, loading: true }
-        case AUTHENTICATE_USER_DETAILS_SUCCESS:
-            return { loading: false, user : action.payload }
-        case AUTHENTICATE_USER_DETAILS_FAIL:
-            return { loading: false, error: action.payload }
-        case AUTHENTICATE_USER_DETAILS_RESET:
-            return {user:{} }
-        default:
-            return state
-    }
-}
 
 
 // export const userDetailsReducer = (state = { user: {} }, action) => {

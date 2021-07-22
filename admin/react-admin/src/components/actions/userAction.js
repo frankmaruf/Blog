@@ -6,10 +6,6 @@ import {
     USER_REGISTER_REQUEST,
     USER_REGISTER_SUCCESS,
     USER_REGISTER_FAIL,
-    AUTHENTICATE_USER_DETAILS_REQUEST,
-    AUTHENTICATE_USER_DETAILS_SUCCESS,
-    AUTHENTICATE_USER_DETAILS_FAIL,
-    AUTHENTICATE_USER_DETAILS_RESET,
     USER_ADDED_BY_ADMIN_REGISTER_REQUEST,
     USER_ADDED_BY_ADMIN_REGISTER_SUCCESS,
     USER_ADDED_BY_ADMIN_REGISTER_FAIL,
@@ -35,7 +31,7 @@ import {
     USER_UPDATE_SUCCESS,
     USER_UPDATE_FAIL,
 }from "../const/userConst"
-
+import {useDispatch} from "react-redux"
 import axios from "axios"
 export const login = (username, password) => async (dispatch) => {
     try {
@@ -56,51 +52,21 @@ export const login = (username, password) => async (dispatch) => {
         )
         const jwt = response.data.jwt
 
-        dispatch({
-            type: USER_LOGIN_SUCCESS,
-            payload: jwt
-        })
-
-        localStorage.setItem('userJWT', JSON.stringify(jwt))
-
-    } catch (error) {
-        dispatch({
-            type: USER_LOGIN_FAIL,
-            payload: error.response && error.response.data.detail
-                ? error.response.data.detail
-                : error.message,
-        })
-    }
-}
-
-
-export const AuthenticateUserDetail = () => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: AUTHENTICATE_USER_DETAILS_REQUEST
-        })
-        const jwt = getState().userLogin.userJWT
-        const config = {
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${jwt}`
-            }
-        }
-
-        const response = await axios.get(
+        const responsed = await axios.get(
             'user',
             config
         )
-        const user = response.data.data
+        const user = responsed.data.data
+        localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('userJWT', JSON.stringify(jwt))
 
         dispatch({
-            type: AUTHENTICATE_USER_DETAILS_SUCCESS,
-            payload: user
+            type: USER_LOGIN_SUCCESS,
+            payload: {jwt,user}
         })
-        localStorage.setItem('user', JSON.stringify(user))
     } catch (error) {
         dispatch({
-            type: AUTHENTICATE_USER_DETAILS_FAIL,
+            type: USER_LOGIN_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,
@@ -280,8 +246,15 @@ export const logout =() => async (dispatch) => {
             type: USER_LOGOUT
         }
     )
-    dispatch({
-            type: AUTHENTICATE_USER_DETAILS_RESET
-        })
+    dispatch(
+        {
+            type: USER_LIST_RESET
+        }
+    )
+    dispatch(
+        {
+            type: USER_LIST_RESET
+        }
+    )
     
 }

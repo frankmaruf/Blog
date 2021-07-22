@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {useDispatch,useSelector} from "react-redux"
 import {Redirect} from 'react-router-dom';
-import { login,AuthenticateUserDetail } from "./actions/userAction";
-import axios from "axios";
+import { login } from "./actions/userAction";
 export const Login = () => {
   const dispatch = useDispatch()
   const userLogin = useSelector(state=>state.userLogin)
@@ -29,10 +28,6 @@ const handleFormSubmit = async event => {
       ...data,
     });
     dispatch(login(data.username, data.password))
-    .then(() => {
-      dispatch(AuthenticateUserDetail())
-    } )
-    
 }
   if(userJWT){
            return <Redirect to="/users"/>
@@ -65,7 +60,6 @@ return (
                 id="password"
               />
             </label>
-
            <button type="submit">
               Login
             </button>
