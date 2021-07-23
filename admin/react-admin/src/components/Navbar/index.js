@@ -21,7 +21,7 @@ const MyNavbar = () => {
             <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
             <Container>
       <NavLink to="/">
-      <Navbar.Brand><GrBlog style={{background:"#03fce3",width:"45px",borderRadius:"5px"}}/>Maruf's Blog</Navbar.Brand>
+      <Navbar.Brand><GrBlog style={{background:"#03fce3",width:"65px",borderRadius:"5px"}}/>Maruf's Blog</Navbar.Brand>
       </NavLink>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">

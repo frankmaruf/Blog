@@ -3,7 +3,7 @@ import {useDispatch,useSelector} from "react-redux"
 import { Redirect } from 'react-router-dom'
 const Profile = () => {
     const userLogin = useSelector(state => state.userLogin)
-    const {user,userJWT} = userLogin
+    const {user} = userLogin
     if(!user){
         return <Redirect to="/login" />
     }

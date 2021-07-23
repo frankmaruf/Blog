@@ -8,6 +8,7 @@ import {useDispatch,useSelector} from "react-redux"
 import axios from "axios";
 import DatePicker from "react-date-picker";
 import { userAddedByAdmin } from "../actions/userAction";
+import {isEqual} from "lodash"
 
 const AddUserModal = ({ addUsershow, setAddUserShow }) => {
   const dispatch = useDispatch()
@@ -179,4 +180,4 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
   );
 };
 
-export default AddUserModal;
+export default React.memo(AddUserModal,isEqual);
