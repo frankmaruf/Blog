@@ -1,9 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-} from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { MyData } from "../Store";
 import axios from "axios";
 import { UserConst } from "../Store/Const/userConst";
@@ -15,17 +10,19 @@ import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import SearchModal from "../Modal/SearchModal";
 import AddUserModal from "../Modal/AddUserModal";
-import {useDispatch,useSelector} from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, listUsers } from "../actions/userAction";
-import { AuthenticateUserDetail } from "../actions/userAction";
 const UsersList = () => {
-  const dispatche = useDispatch()
-  const userList = useSelector(state => state.userList)
-  const {loading,error,users} = userList
-  const { state, dispatch } = useContext(MyData); //state value
+  const [searchData, setSearchData] = useState([]);
+  console.log("render UserList");
+  const dispatche = useDispatch();
+  const userList = useSelector((state) => state.userList);
+  const { loading, error, users } = userList;
   useEffect(() => {
     //to list all users
-    dispatche(listUsers())
+    if (users.length === 0) {
+      dispatche(listUsers());
+    }
   }, []);
 
   const actions = (id) => {
@@ -49,44 +46,28 @@ const UsersList = () => {
       </>
     );
   };
-  const [searchData, setSearchData] = useState([]);
   const deleteHandler = async (id) => {
     setSearchData((people) => {
       return people.filter((person) => person.id !== id);
     });
-    dispatche(deleteUser(id))
+    dispatche(deleteUser(id));
   };
   const [show, setShow] = useState(false);
-  const [addUsershow, setAddUserShow] = useState(false);
+  const [addUsershow, setAddUserShow] = useState(false); //props to add user modal
+  const memoRizeAddModal = useCallback(() => {
+    setAddUserShow();
+  }, [addUsershow]);
   const handleSearchShow = () => {
     setShow(!show);
   };
   const handleAddShow = () => {
     setAddUserShow(!addUsershow);
   };
-  const memoizedCallback = useCallback(
-  () => {
-    setShow();
-  },
-  [show],
-);
-  const memoizedActions = useCallback(
-  () => {
-    actions();
-  },
-  [],
-);
-  const memoizedAddShow = useCallback(
-  () => {
-    handleAddShow();
-  },
-  [],
-);
-const userLogin = useSelector(state => state.userLogin)
-    const {user} = userLogin
-    if(!user){
-        return <Redirect to="/login" />
-    }
+  const userLogin = useSelector((state) => state.userLogin);
+  const { user } = userLogin;
+  if (!user) {
+    return <Redirect to="/login" />;
+  }
   return (
     <div>
       {loading ? (
@@ -96,34 +77,34 @@ const userLogin = useSelector(state => state.userLogin)
       ) : (
         <div className="container-fluid">
           <div className="row justify-content-between ml-1 mr-1 mt-3">
-            <Button
+            <button
               className="col-1 bg-primary text-white"
-              onClick={memoizedAddShow}
+              onClick={handleAddShow}
             >
               Add User
-            </Button>
-            <Button
+            </button>
+            <button
               className="col-1 bg-warning text-white"
               onClick={handleSearchShow}
             >
               Search
-            </Button>
+            </button>
           </div>
           {/* Search Modal */}
           <div>
             <SearchModal
+              show={show}
+              setShow={setShow}
+              actions={actions}
               searchData={searchData}
               setSearchData={setSearchData}
-              show={show}
-              setShow={memoizedCallback}
-              actions={actions}
             />
           </div>
 
           {/* Add User */}
           <AddUserModal
             addUsershow={addUsershow}
-            setAddUserShow={setAddUserShow}
+            setAddUserShow={memoRizeAddModal}
           />
 
           {/* Users List */}
@@ -157,4 +138,4 @@ const userLogin = useSelector(state => state.userLogin)
   );
 };
 
-export default UsersList;
+export default React.memo(UsersList);

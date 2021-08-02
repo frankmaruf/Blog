@@ -1,17 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import Button from "@material-ui/core/Button";
 import { Form, Col } from "react-bootstrap";
 import { MyData } from "../Store";
 import { UserConst } from "../Store/Const/userConst";
-import {useDispatch,useSelector} from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import DatePicker from "react-date-picker";
 import { userAddedByAdmin } from "../actions/userAction";
-import {isEqual} from "lodash"
+import { isEqual } from "lodash";
 
 const AddUserModal = ({ addUsershow, setAddUserShow }) => {
-  const dispatch = useDispatch()
+  console.log("renderd");
+  const dispatch = useDispatch();
   const [roles, setRoles] = useState([]);
   const [person, setPerson] = useState({
     first_name: "",
@@ -40,15 +40,15 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
       date_of_birth: date[0],
       username: person.username,
     };
-    dispatch(userAddedByAdmin(value))
+    dispatch(userAddedByAdmin(value));
     setPerson({
       first_name: "",
-    last_name: "",
-    email: "",
-    role_id: 0,
-    date_of_birth: new Date(),
-    username: "",
-    })
+      last_name: "",
+      email: "",
+      role_id: 0,
+      date_of_birth: new Date(),
+      username: "",
+    });
   };
 
   const handleClose = () => setAddUserShow(false);
@@ -148,7 +148,7 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
                 })}
               </Form.Control>
             </Form.Group>
-            <Button
+            <button
               style={{
                 background: "blue",
                 color: "white",
@@ -156,28 +156,27 @@ const AddUserModal = ({ addUsershow, setAddUserShow }) => {
                 marginRight: "50%",
                 marginTop: "5%",
               }}
-              variant="primary"
               type="submit"
+              className="btn btn-primary"
               onClick={handleSubmit}
             >
               Submit
-            </Button>
+            </button>
           </Form>
           {/* User Add Form */}
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <button
             type="submit"
             className="btn btn-default"
-            variant="secondary"
             onClick={handleClose}
           >
             Close
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     </div>
   );
 };
 
-export default React.memo(AddUserModal,isEqual);
+export default React.memo(AddUserModal, isEqual);
