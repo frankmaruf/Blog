@@ -18,6 +18,7 @@ def register(request):
     data = request.data
     if data['password'] != data['password_confirm']:
         raise exceptions.APIException('Password do not match!')
+    data['role'] = 3
     serializers = UserSerializer(data = data)
     serializers.is_valid(raise_exception=True)
     serializers.save()

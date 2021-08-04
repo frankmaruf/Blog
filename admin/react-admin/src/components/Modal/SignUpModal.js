@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Modal } from "react-bootstrap";
-import { Form, Col } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import axios from "axios";
-import { userAddedByAdmin } from "../actions/userAction";
-import { isEqual } from "lodash";
-
-const AddUserModal = ({ addUsershow, setAddUserShow, handleShow }) => {
-  console.log("renderd AddUserModal");
+import React, { useState } from "react";
+import { Col, Form, Modal } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../actions/userAction";
+const SignUpModal = ({ signUpshow, handleShow }) => {
   const dispatch = useDispatch();
-  const [roles, setRoles] = useState([]);
   const [person, setPerson] = useState({
     first_name: "",
     last_name: "",
     email: "",
-    role_id: 0,
-    date_of_birth: new Date(),
+    date_of_birth: new Date().toLocaleDateString(),
     username: "",
+    password: "",
+    password_confirm: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,42 +22,32 @@ const AddUserModal = ({ addUsershow, setAddUserShow, handleShow }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const date = person.date_of_birth;
-    console.log(date);
     const value = {
       first_name: person.first_name,
       last_name: person.last_name,
       email: person.email,
-      role_id: person.role_id,
-      date_of_birth: date,
+      date_of_birth: person.date_of_birth,
       username: person.username,
+      password: person.password,
+      password_confirm: person.password_confirm,
     };
-    dispatch(userAddedByAdmin(value)).then(() => {
-      setAddUserShow(!addUsershow);
-    });
+    console.log(value);
+    dispatch(register(value));
     setPerson({
       first_name: "",
       last_name: "",
       email: "",
-      role_id: 0,
-      date_of_birth: new Date(),
+      date_of_birth: new Date().toLocaleDateString(),
       username: "",
+      password: "",
+      password_confirm: "",
     });
   };
-
-  const handleClose = () => setAddUserShow(false);
-  const getRoles = async () => {
-    const response = await axios.get("roles");
-    setRoles(response.data.data);
-  };
-  useEffect(() => {
-    getRoles();
-  }, []);
   return (
-    <div>
+    <>
       <Modal
-        show={addUsershow}
-        onHide={handleClose}
+        show={signUpshow}
+        onHide={handleShow}
         backdrop="static"
         keyboard={false}
       >
@@ -72,7 +57,7 @@ const AddUserModal = ({ addUsershow, setAddUserShow, handleShow }) => {
         <Modal.Body>
           {/* User Add Form */}
           <Form onSubmit={handleSubmit}>
-            <Form.Group as={Col} controlId="formGridEmail">
+            <Form.Group as={Col} controlId="formGridFirstName">
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 name="first_name"
@@ -82,7 +67,7 @@ const AddUserModal = ({ addUsershow, setAddUserShow, handleShow }) => {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Form.Group as={Col} controlId="formGridPassword">
+            <Form.Group as={Col} controlId="formGridLastName">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 name="last_name"
@@ -93,14 +78,12 @@ const AddUserModal = ({ addUsershow, setAddUserShow, handleShow }) => {
               />
             </Form.Group>
             <input
-              required
               name="date_of_birth"
               type="date"
               value={person.date_of_birth}
               onChange={handleChange} //only when value has changed
             />
-
-            <Form.Group controlId="formGridAddress1">
+            <Form.Group controlId="formGridEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 value={person.email}
@@ -110,7 +93,7 @@ const AddUserModal = ({ addUsershow, setAddUserShow, handleShow }) => {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Form.Group controlId="formGridAddress1">
+            <Form.Group controlId="formGridUsername">
               <Form.Label>Username</Form.Label>
               <Form.Control
                 value={person.username}
@@ -120,29 +103,25 @@ const AddUserModal = ({ addUsershow, setAddUserShow, handleShow }) => {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>Role</Form.Label>
+            <Form.Group controlId="formGridPassword">
+              <Form.Label>Password</Form.Label>
               <Form.Control
-                onChange={(e) => {
-                  setPerson((prevState) => ({
-                    ...prevState,
-                    role_id: parseInt(e.target.value),
-                  }));
-                  console.log(e.target.value);
-                }}
-                as="select"
-                defaultValue="Choose..."
-                name="role"
-              >
-                <option>Choise.....</option>
-                {roles.map((role) => {
-                  return (
-                    <option key={role.id} value={role.id}>
-                      {role.name}
-                    </option>
-                  );
-                })}
-              </Form.Control>
+                value={person.password}
+                name="password"
+                type="password"
+                placeholder="Password"
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formGridPasswordConfirm">
+              <Form.Label>Password Confirm</Form.Label>
+              <Form.Control
+                value={person.password_confirm}
+                name="password_confirm"
+                type="password"
+                placeholder="Confirm Password"
+                onChange={handleChange}
+              />
             </Form.Group>
             <button
               style={{
@@ -165,14 +144,14 @@ const AddUserModal = ({ addUsershow, setAddUserShow, handleShow }) => {
           <button
             type="submit"
             className="btn btn-default"
-            onClick={handleClose}
+            onClick={handleShow}
           >
             Close
           </button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </>
   );
 };
 
-export default React.memo(AddUserModal, isEqual);
+export default SignUpModal;

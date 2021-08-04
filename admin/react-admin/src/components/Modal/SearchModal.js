@@ -7,8 +7,9 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import { isEqual } from "lodash";
 
-const SearchModal = ({ actions, show, setShow, searchData, setSearchData }) => {
+const SearchModal = ({ actions, show, setShow }) => {
   console.log("render SearchModel");
+  const [searchData, setSearchData] = useState([]);
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
   const inputRef = useRef(null); //to focus input field current.focus()
@@ -41,7 +42,7 @@ const SearchModal = ({ actions, show, setShow, searchData, setSearchData }) => {
   const MemorizeSearch = React.memo(({ data }) => {
     return (
       <ListItem key={data.id}>
-        <ListItemAvatar>{actions(data.id)}</ListItemAvatar>
+        <ListItemAvatar>{actions(data.id, setSearchData)}</ListItemAvatar>
         <ListItemText className="ml-2">{data.email}</ListItemText>
         <ListItemText>@{data.username}</ListItemText>
       </ListItem>

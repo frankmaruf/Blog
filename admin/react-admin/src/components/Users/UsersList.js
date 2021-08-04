@@ -13,25 +13,24 @@ import AddUserModal from "../Modal/AddUserModal";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, listUsers } from "../actions/userAction";
 const UsersList = () => {
-  const [searchData, setSearchData] = useState([]);
   console.log("render UserList");
   const dispatche = useDispatch();
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
   useEffect(() => {
     //to list all users
-    if (users.length === 0) {
-      dispatche(listUsers());
-    }
+
+    dispatche(listUsers());
   }, []);
 
-  const actions = (id) => {
+  const actions = (id, callBack) => {
     //to get two button for delete and edit
+    var noop = (callBack = () => {});
     return (
       <>
         <Tooltip title="Delete" arrow>
           <Button variant="outlined">
-            <DeleteIcon color="action" onClick={() => deleteHandler(id)}>
+            <DeleteIcon color="action" onClick={() => deleteHandler(id, noop)}>
               Delete
             </DeleteIcon>
           </Button>
@@ -46,14 +45,18 @@ const UsersList = () => {
       </>
     );
   };
-  const deleteHandler = async (id) => {
-    setSearchData((people) => {
+  const deleteHandler = async (id, callBack) => {
+    var noop = (callBack = () => {});
+    noop((people) => {
       return people.filter((person) => person.id !== id);
     });
     dispatche(deleteUser(id));
   };
   const [show, setShow] = useState(false);
   const [addUsershow, setAddUserShow] = useState(false); //props to add user modal
+  const memoRizeSearchSetShow = useCallback(() => {
+    setShow();
+  }, [show, actions]);
   const memoRizeAddModal = useCallback(() => {
     setAddUserShow();
   }, [addUsershow]);
@@ -94,10 +97,8 @@ const UsersList = () => {
           <div>
             <SearchModal
               show={show}
-              setShow={setShow}
+              setShow={memoRizeSearchSetShow}
               actions={actions}
-              searchData={searchData}
-              setSearchData={setSearchData}
             />
           </div>
 
